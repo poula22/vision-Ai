@@ -13,9 +13,6 @@ import androidx.core.content.ContextCompat
 import com.example.vision_ai.ui.theme.VisionAiTheme
 import android.Manifest
 import android.util.Log
-import androidx.annotation.OptIn
-import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -25,7 +22,6 @@ import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.concurrent.Executors
 
 
 class MainActivity : ComponentActivity() {
@@ -78,27 +74,9 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @OptIn(ExperimentalGetImage::class) private fun analysisImage(imageAnalysis: ImageAnalysis) {
-        imageAnalysis.setAnalyzer(Executors.newFixedThreadPool(4), ImageAnalysis.Analyzer { imageProxy ->
-            val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-            // insert your code here.
-            val map = imageProxy.toBitmap()
-            labeler.process(map,0)
-                .addOnSuccessListener { labels ->
-                    // Task completed successfully
-                    // ...
-                    Log.i("hellllo",labels.get(0).text)
-                }
-                .addOnFailureListener { e ->
-                    // Task failed with an exception
-                    // ...
-                }
-
-
-            // after done, release the ImageProxy object
-            imageProxy.close()
-        })
-    }
+//    @OptIn(ExperimentalGetImage::class) private fun analysisImage(imageAnalysis: ImageAnalysis) {
+//
+//    }
 
     private fun setCameraPreview() {
         setContent {
@@ -108,7 +86,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    CameraPreviewScreen(::captureImage,::analysisImage)
+                    CameraPreviewScreen(labeler)
                 }
             }
         }

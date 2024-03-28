@@ -1,6 +1,8 @@
 package com.example.vision_ai.camera
 
 import android.content.Context
+import android.util.Log
+import android.util.Size
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
@@ -9,22 +11,29 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.google.mlkit.vision.label.ImageLabeler
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Composable
-fun CameraPreviewScreen(captureImage: (ImageCapture) -> Unit, analysisImage: (ImageAnalysis) -> Unit) {
+fun CameraPreviewScreen(labeler: ImageLabeler) {
     val lensFacing = CameraSelector.LENS_FACING_BACK
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -33,9 +42,6 @@ fun CameraPreviewScreen(captureImage: (ImageCapture) -> Unit, analysisImage: (Im
         PreviewView(context)
     }
     val cameraxSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
-    val imageCapture = remember {
-        ImageCapture.Builder().build()
-    }
 
     val imageAnalysis = remember {
         ImageAnalysis.Builder()
@@ -45,18 +51,47 @@ fun CameraPreviewScreen(captureImage: (ImageCapture) -> Unit, analysisImage: (Im
             .build()
     }
 
+    var text by remember {
+        mutableStateOf("")
+    }
 
     LaunchedEffect(lensFacing) {
         val cameraProvider = context.getCameraProvider()
         cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(lifecycleOwner, cameraxSelector, preview, imageAnalysis)
         preview.setSurfaceProvider(previewView.surfaceProvider)
+
+        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalysis.Analyzer { imageProxy ->
+            val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+            // insert your code here.
+            val map = imageProxy.toBitmap()
+            labeler.process(map,0)
+                .addOnSuccessListener { labels ->
+                    // Task completed successfully
+                    // ...
+                    lifecycleOwner.lifecycleScope.launch {
+                        for (label in labels){
+                            text =label.text
+                        }
+                        delay(2500)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    // Task failed with an exception
+                    // ...
+                }
+
+
+            // after done, release the ImageProxy object
+            imageProxy.close()
+        })
     }
     Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
-        Button(onClick = { analysisImage(imageAnalysis) }) {
-            Text(text = "Capture Image")
-        }
+        Text(text = text)
+//        Button(onClick = { analysisImage(imageAnalysis) }) {
+//            Text(text = "Capture Image")
+//        }
     }
 }
 
