@@ -51,6 +51,10 @@ fun CameraPreviewScreen(labeler: ImageLabeler) {
             .build()
     }
 
+    val imageCapture = remember {
+        ImageCapture.Builder().build()
+    }
+
     var text by remember {
         mutableStateOf("")
     }
@@ -65,15 +69,10 @@ fun CameraPreviewScreen(labeler: ImageLabeler) {
             val rotationDegrees = imageProxy.imageInfo.rotationDegrees
             // insert your code here.
             val map = imageProxy.toBitmap()
-            labeler.process(map,0)
+            labeler.process(map,rotationDegrees)
                 .addOnSuccessListener { labels ->
-                    // Task completed successfully
-                    // ...
-                    lifecycleOwner.lifecycleScope.launch {
-                        for (label in labels){
-                            text =label.text
-                        }
-                        delay(2500)
+                    for (label in labels){
+                        text =label.text
                     }
                 }
                 .addOnFailureListener { e ->
@@ -86,12 +85,10 @@ fun CameraPreviewScreen(labeler: ImageLabeler) {
             imageProxy.close()
         })
     }
+
     Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
         AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
         Text(text = text)
-//        Button(onClick = { analysisImage(imageAnalysis) }) {
-//            Text(text = "Capture Image")
-//        }
     }
 }
 

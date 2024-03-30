@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
+    alias(libs.plugins.hiltGradlePlugin)
 }
 
 android {
@@ -63,6 +65,15 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.camera2)
+
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.androidCompiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
+    implementation("com.google.firebase:firebase-core:21.1.1")
+    implementation("com.google.firebase:firebase-appindexing:20.0.0")
+
     implementation("com.google.mlkit:image-labeling:17.0.8")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

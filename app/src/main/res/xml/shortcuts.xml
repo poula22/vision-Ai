@@ -1,0 +1,26 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <capability android:name="actions.intent.OPEN_APP_FEATURE">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.example.vision_ai"
+            android:targetClass="com.example.vision_ai.MainActivity">
+            <parameter
+                android:name="feature"
+                android:key="feature"/>
+        </intent>
+    </capability>
+
+    <shortcut
+        android:shortcutId="active_tasks"
+        android:shortcutShortLabel="@string/label_active"
+        android:enabled="false">
+        <capability-binding
+            android:key="actions.intent.OPEN_APP_FEATURE">
+            <parameter-binding
+                android:key="feature"
+                android:value="feature" />
+        </capability-binding>
+    </shortcut>
+
+</shortcuts>
