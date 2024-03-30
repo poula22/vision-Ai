@@ -1,8 +1,6 @@
-package com.example.vision_ai.camera
+package com.example.vision_ai.feature.camera.presentation
 
 import android.content.Context
-import android.util.Log
-import android.util.Size
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
@@ -24,10 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import com.google.mlkit.vision.label.ImageLabeler
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

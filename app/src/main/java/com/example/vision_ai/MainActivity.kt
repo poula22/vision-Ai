@@ -23,16 +23,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
-import com.example.vision_ai.camera.CameraPreviewScreen
-import com.example.vision_ai.camera.CameraView
-import com.example.vision_ai.camera.viewModel.CameraViewModel
-import com.example.vision_ai.voice_to_text.presentation.model.VoiceToTextEvent
+import com.example.vision_ai.feature.camera.presentation.CameraView
+import com.example.vision_ai.feature.camera.presentation.viewModel.CameraViewModel
 import com.google.mlkit.vision.label.ImageLabeling
 import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

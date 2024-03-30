@@ -1,4 +1,4 @@
-package com.example.vision_ai.camera
+package com.example.vision_ai.feature.camera.presentation
 
 import android.Manifest
 import android.speech.tts.TextToSpeech
@@ -6,16 +6,13 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture.OnImageCapturedCallback
 import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,14 +27,12 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.example.vision_ai.camera.model.CameraState
-import com.example.vision_ai.camera.model.DisplayState
-import com.example.vision_ai.voice_to_text.presentation.model.VoiceToTextEvent
-import com.example.vision_ai.voice_to_text.presentation.textToSpeach.rememberTextToSpeech
+import com.example.vision_ai.feature.camera.presentation.model.CameraState
+import com.example.vision_ai.feature.voice_to_text.presentation.model.VoiceToTextEvent
+import com.example.vision_ai.feature.text_to_speech.rememberTextToSpeech
 import com.google.mlkit.vision.label.ImageLabeler
 import kotlinx.coroutines.delay
 import java.util.Locale
-import java.util.concurrent.Executors
 
 @Composable
 fun CameraView(

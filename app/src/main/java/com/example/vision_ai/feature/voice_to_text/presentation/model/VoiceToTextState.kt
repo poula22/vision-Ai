@@ -1,4 +1,4 @@
-package com.example.vision_ai.voice_to_text.presentation.model
+package com.example.vision_ai.feature.voice_to_text.presentation.model
 
 data class VoiceToTextState(
     val result: String ="",

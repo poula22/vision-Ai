@@ -1,12 +1,11 @@
-package com.example.vision_ai.camera.viewModel
+package com.example.vision_ai.feature.camera.presentation.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.vision_ai.camera.model.CameraState
-import com.example.vision_ai.camera.model.DisplayState
-import com.example.vision_ai.voice_to_text.presentation.model.VoiceToTextEvent
-import com.example.vision_ai.voice_to_text.presentation.parser.VoiceToTextParser
+import com.example.vision_ai.feature.camera.presentation.model.CameraState
+import com.example.vision_ai.feature.camera.presentation.model.DisplayState
+import com.example.vision_ai.feature.voice_to_text.presentation.model.VoiceToTextEvent
+import com.example.vision_ai.feature.voice_to_text.presentation.parser.VoiceToTextParser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

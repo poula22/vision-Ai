@@ -1,7 +1,7 @@
 package com.example.vision_ai.di
 
 import android.app.Application
-import com.example.vision_ai.voice_to_text.presentation.parser.VoiceToTextParser
+import com.example.vision_ai.feature.voice_to_text.presentation.parser.VoiceToTextParser
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

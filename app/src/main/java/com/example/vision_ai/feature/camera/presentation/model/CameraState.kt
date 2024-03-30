@@ -1,4 +1,4 @@
-package com.example.vision_ai.camera.model
+package com.example.vision_ai.feature.camera.presentation.model
 
 data class CameraState(
     val spokenText: String = "",

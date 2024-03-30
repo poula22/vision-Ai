@@ -1,4 +1,4 @@
-package com.example.vision_ai.voice_to_text.presentation.textToSpeach
+package com.example.vision_ai.feature.text_to_speech
 
 import android.speech.tts.TextToSpeech
 import androidx.compose.runtime.Composable

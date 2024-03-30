@@ -1,4 +1,4 @@
-package com.example.vision_ai.voice_to_text.presentation.parser
+package com.example.vision_ai.feature.voice_to_text.presentation.parser
 
 import android.app.Application
 import android.content.Intent
@@ -7,7 +7,7 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
-import com.example.vision_ai.voice_to_text.presentation.model.VoiceToTextState
+import com.example.vision_ai.feature.voice_to_text.presentation.model.VoiceToTextState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
