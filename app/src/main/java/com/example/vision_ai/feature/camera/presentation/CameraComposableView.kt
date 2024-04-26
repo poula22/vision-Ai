@@ -22,13 +22,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.google.mlkit.vision.label.ImageLabeler
+import org.tensorflow.lite.support.image.ImageProcessor
+import org.tensorflow.lite.support.image.TensorImage
+import org.tensorflow.lite.support.image.ops.Rot90Op
+import org.tensorflow.lite.task.vision.detector.ObjectDetector
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @Composable
-fun CameraPreviewScreen(labeler: ImageLabeler) {
+fun CameraPreviewScreen(
+//    labeler: ImageLabeler
+) {
     val lensFacing = CameraSelector.LENS_FACING_BACK
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -54,31 +59,49 @@ fun CameraPreviewScreen(labeler: ImageLabeler) {
         mutableStateOf("")
     }
 
+    val objectDetector = remember {
+        ObjectDetector.createFromFileAndOptions(
+            context,
+            "obj detection",
+            ObjectDetector.ObjectDetectorOptions.builder()
+                .setScoreThreshold(0.7f)
+                .setMaxResults(1)
+                .build()
+        )
+    }
+
+
     LaunchedEffect(lensFacing) {
         val cameraProvider = context.getCameraProvider()
         cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(lifecycleOwner, cameraxSelector, preview, imageAnalysis)
         preview.setSurfaceProvider(previewView.surfaceProvider)
 
-        imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), ImageAnalysis.Analyzer { imageProxy ->
-            val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-            // insert your code here.
-            val map = imageProxy.toBitmap()
-            labeler.process(map,rotationDegrees)
-                .addOnSuccessListener { labels ->
-                    for (label in labels){
-                        text =label.text
-                    }
-                }
-                .addOnFailureListener { e ->
-                    // Task failed with an exception
-                    // ...
-                }
+        imageAnalysis.setAnalyzer(
+            Executors.newSingleThreadExecutor(),
+            ImageAnalysis.Analyzer { imageProxy ->
+                val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+                // insert your code here.
+                val map = imageProxy.toBitmap()
+//            labeler.process(map,rotationDegrees)
+//                .addOnSuccessListener { labels ->
+//                    for (label in labels){
+//                        text =label.text
+//                    }
+//                }
+//                .addOnFailureListener { e ->
+//                    // Task failed with an exception
+//                    // ...
+//                }
 
 
-            // after done, release the ImageProxy object
-            imageProxy.close()
-        })
+                val imageProcessor = ImageProcessor.Builder().add(Rot90Op(-rotationDegrees / 90)).build()
+                val tensorImage = imageProcessor.process(TensorImage.fromBitmap(imageProxy.toBitmap()))
+                val results = objectDetector?.detect(tensorImage)
+                text = results?.get(0)?.categories?.get(0)?.label ?: "unKnown"
+                // after done, release the ImageProxy object
+                imageProxy.close()
+            })
     }
 
     Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {

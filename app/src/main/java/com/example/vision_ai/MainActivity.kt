@@ -25,8 +25,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import com.example.vision_ai.feature.camera.presentation.CameraView
 import com.example.vision_ai.feature.camera.presentation.viewModel.CameraViewModel
-import com.google.mlkit.vision.label.ImageLabeling
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
+//import com.google.mlkit.vision.label.ImageLabeling
+//import com.google.mlkit.vision.label.defaults.ImageLabelerOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
         }
 
-    val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
+//    val labeler = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.handleIntent()
@@ -118,7 +118,7 @@ class MainActivity : ComponentActivity() {
                     val viewModel = hiltViewModel<CameraViewModel>()
                     val state by viewModel.state.collectAsState()
                     CameraView(
-                        labeler = labeler,
+//                        labeler = labeler,
                         state = state,
                         langCode = "en"
                     ) {
