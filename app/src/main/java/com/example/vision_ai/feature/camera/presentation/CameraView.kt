@@ -150,8 +150,8 @@ fun CameraView(
 
     Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.fillMaxSize()) {
         AndroidView({ previewView }, modifier = Modifier
-            .size(200.dp)
-            .align(Alignment.Center))
+            .fillMaxSize()
+        )
         Text(text = text)
 //        Text(text = state.recordError ?: "")
     }
